@@ -1,8 +1,12 @@
 import { useSession, signIn, signOut } from "next-auth/react"
 import styles from './styles.module.css'
 import Link from 'next/link'
+import perfilDefalt from '../../assets/profile.png'
 export function Header() {
     const { data: session, status } = useSession();
+    const partesNome = session?.user?.name?.split(' ')
+    const primeiroEsegundoNome = `${partesNome?.[0]}` + ' ' + `${partesNome?.[1] || ''}`;
+    const perfil = session?.user?.image
     return (
         <header className={styles.header}>
             <section className={styles.content}>
@@ -22,7 +26,8 @@ export function Header() {
                     <></>
                 ) : session ? (
                     <button className={styles.loginButton} onClick={() => signOut()}>
-                        Olá {session?.user?.name}
+                        Olá, {primeiroEsegundoNome}
+                        <img src={`${perfil}` || "https://cdn-icons-png.flaticon.com/512/3237/3237472.png"} alt="perfil" />
                     </button>
 
                 ) : (

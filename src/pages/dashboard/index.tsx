@@ -9,6 +9,7 @@ import Link from 'next/link'
 import Textarea from '@/components/textarea'
 import { FiShare2 } from 'react-icons/fi'
 import { FaTrash } from 'react-icons/fa'
+import { IoMdOpen } from "react-icons/io";
 
 import { db } from '@/services/firebaseConnection'
 import { addDoc, collection, query, orderBy, where, onSnapshot, doc, deleteDoc } from 'firebase/firestore'
@@ -108,7 +109,7 @@ export default function Dashboard({ user }: HomeProps) {
             <main className={styles.main}>
                 <section className={styles.content}>
                     <div className={styles.contentForm}>
-                        <h1 className={styles.title}>Qual sua terefa?</h1>
+                        <h1 className={styles.title}>Qual sua nova terefa?</h1>
 
                         <form action="" onSubmit={handleRegisterTask}>
                             <Textarea
@@ -138,10 +139,16 @@ export default function Dashboard({ user }: HomeProps) {
                     {tasks.map((item) => (
                         <article className={styles.task} key={item.id}>
                             {item.public && (
+                                // Publico e botao compartilhar e link
                                 <div className={styles.tagContainer}>
                                     <label className={styles.tag}>PUBLICO</label>
                                     <button className={styles.shareButton} onClick={() => handleShare(item.id)}>
                                         <FiShare2 size={22} color='#3183ff' />
+                                    </button>
+                                    <button className={styles.shareButton}>
+                                        <Link href={`task/${item.id}`}>
+                                            <IoMdOpen size={22} color='#3183ff' />
+                                        </Link>
                                     </button>
                                 </div>
                             )}
@@ -181,7 +188,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     return {
         props: {
             user: {
-                email: session?.user?.email
+                email: session?.user?.email,
+                // photoURL: session?.user?.image
             }
         },
     };
