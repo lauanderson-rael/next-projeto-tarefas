@@ -86,12 +86,18 @@ export default function Dashboard({ user }: HomeProps) {
     }
 
     async function handleShare(id: string) {
-        // copiado o link
-        await navigator.clipboard.writeText(
-            `${process.env.NEXT_PUBLIC_URL}/task/${id}`
-        );
+        // await navigator.clipboard.writeText(
+        //     `${process.env.URL}/task/${id}`
+        // );
 
-        alert("URL copiada com sucesso!")
+        // alert("URL copiada com sucesso! ")
+
+        const siteURL = process.env.NODE_ENV === "development"
+            ? "http://localhost:3000"  // URL de desenvolvimento
+            : window.location.origin; // URL em produção (Vercel)
+        const link = `${siteURL}/task/${id}`
+        await navigator.clipboard.writeText(link);
+        alert("URL copiada com sucesso!");
     }
 
     async function handleDeleteTask(id: string) {
