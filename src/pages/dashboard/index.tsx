@@ -115,11 +115,11 @@ export default function Dashboard({ user }: HomeProps) {
             <main className={styles.main}>
                 <section className={styles.content}>
                     <div className={styles.contentForm}>
-                        <h1 className={styles.title}>Qual sua nova terefa?</h1>
+                        <h1 className={styles.title}>Qual sua nova tarefa?</h1>
 
                         <form action="" onSubmit={handleRegisterTask}>
                             <Textarea
-                                placeholder='Digite qual sua terefa ...'
+                                placeholder='Digite qual sua tarefa ...'
                                 value={input}
                                 onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setInput(event.target.value)}
                             />
@@ -129,7 +129,7 @@ export default function Dashboard({ user }: HomeProps) {
                                     onChange={handleChangePublic}
 
                                 />
-                                <label htmlFor="">Deixar terefa publica?</label>
+                                <label htmlFor="">Deixar tarefa publica?</label>
                             </div>
 
                             <button className={styles.button} type='submit'>
