@@ -97,7 +97,7 @@ export default function Dashboard({ user }: HomeProps) {
             : window.location.origin; // URL em produção (Vercel)
         const link = `${siteURL}/task/${id}`
         await navigator.clipboard.writeText(link);
-        alert("URL copiada com sucesso!");
+        alert("URL copiada com sucesso!\nAgora voce pode compartilhar essa terefa com quem voce quiser.");
     }
 
     async function handleDeleteTask(id: string) {
