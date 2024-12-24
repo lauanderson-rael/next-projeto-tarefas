@@ -88,7 +88,7 @@ export default function Dashboard({ user }: HomeProps) {
     async function handleShare(id: string) {
         // copiado o link
         await navigator.clipboard.writeText(
-            `${process.env.NEXT_PUBLIC_URL}/task/${id}`
+            `${process.env.NEXTAUTH_URL}/task/${id}`
         );
 
         alert("URL copiada com sucesso!")
