@@ -12,8 +12,12 @@ export function Header() {
 
     const router = useRouter();
     const { pathname } = router; // obtém a rota
-    const textButton = pathname === "/task" ? "Home" : "Meu painel";
 
+    // Verificar se a rota contém a página dinâmica /task/:id
+    const isTaskPage = pathname.startsWith("/task/");
+    const textButton = isTaskPage ? "Voltar" : "Meu painel";
+
+    
     return (
         <header className={styles.header}>
             <section className={styles.content}>
