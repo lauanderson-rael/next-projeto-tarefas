@@ -73,7 +73,7 @@
         border: 1.5px solid #f1f1f1;
     }
     &:focus{
-        background-color: #eaeaea;
+        opacity: 0.7;
         
     }
 }
