@@ -2,7 +2,7 @@ import { useSession, signIn, signOut } from "next-auth/react"
 import styles from './styles.module.css'
 import Link from 'next/link'
 import perfilDefalt from '../../assets/profile.png'
-import { useLocation } from "react-router-dom";
+import { useRouter } from 'next/router';
 
 export function Header() {
     const { data: session, status } = useSession();
@@ -10,10 +10,11 @@ export function Header() {
     const primeiroEsegundoNome = `${partesNome?.[0]}` + ' ' + `${partesNome?.[1] || ''}`;
     var perfil = session?.user?.image
 
-    const location = useLocation();
+    const router = useRouter();
+    const { pathname } = router; // obtém a rota
     const textButton = "Meu painel" 
-    if (location.pathname === "/dashboard") {
-       console.log("Você está na página inicial!");
+    if (pathname === "/dashboard") {
+       console.log("Você está na página dashboard!");
        textButton = "Home"
     }
 
