@@ -2,11 +2,20 @@ import { useSession, signIn, signOut } from "next-auth/react"
 import styles from './styles.module.css'
 import Link from 'next/link'
 import perfilDefalt from '../../assets/profile.png'
+import { useLocation } from "react-router-dom";
+
 export function Header() {
     const { data: session, status } = useSession();
     const partesNome = session?.user?.name?.split(' ')
     const primeiroEsegundoNome = `${partesNome?.[0]}` + ' ' + `${partesNome?.[1] || ''}`;
     var perfil = session?.user?.image
+
+    const location = useLocation();
+    const textButton = "Meu painel" 
+    if (location.pathname === "/dashboard") {
+       console.log("Você está na página inicial!");
+       textButton = "Home"
+    }
 
     return (
         <header className={styles.header}>
@@ -18,7 +27,7 @@ export function Header() {
 
                     {session?.user && (
                         <Link href={'/dashboard'} className={styles.link}>
-                            Meu Painel
+                            {textButton}
                         </Link>
                     )}
                 </nav>
