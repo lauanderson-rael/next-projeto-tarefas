@@ -6,7 +6,8 @@ export function Header() {
     const { data: session, status } = useSession();
     const partesNome = session?.user?.name?.split(' ')
     const primeiroEsegundoNome = `${partesNome?.[0]}` + ' ' + `${partesNome?.[1] || ''}`;
-    const perfil = session?.user?.image
+    var perfil = session?.user?.image
+
     return (
         <header className={styles.header}>
             <section className={styles.content}>

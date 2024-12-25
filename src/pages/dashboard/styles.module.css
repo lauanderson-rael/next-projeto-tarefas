@@ -80,6 +80,8 @@
     border: 1.5px solid #909090;
     border-radius: 4px;
     padding: 14px;
+    background-color: #f4f4f4;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 
 .tagContainer{
@@ -94,6 +96,7 @@
     padding: 2px 6px;
     font-size: 12px;
     border-radius: 4px;
+    color: #fff;
 }
 
 .shareButton{

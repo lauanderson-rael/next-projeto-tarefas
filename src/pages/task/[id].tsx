@@ -26,6 +26,7 @@ interface CommentProps {
     comment: string;
     taskId: string;
     user: string;
+    image: string;
     name: string
 }
 
@@ -46,6 +47,7 @@ export default function Task({ item, allComments }: TaskProps) {
                 created: new Date(),
                 user: session?.user?.email,
                 name: session?.user?.name,
+                image: session?.user?.image,
                 taskId: item?.taskId
             });
 
@@ -54,6 +56,7 @@ export default function Task({ item, allComments }: TaskProps) {
                 comment: input,
                 user: session?.user?.email,
                 name: session?.user?.name,
+                image: session?.user?.image!, // Adicionando a imagem ao estado
                 taskId: item?.taskId
             }
             setComments([...comments, data])
@@ -114,10 +117,19 @@ export default function Task({ item, allComments }: TaskProps) {
                 {comments.map((item) => (
                     <article key={item.id} className={styles.comment}>
                         <div className={styles.headComment}>
-                            <label className={styles.commentsLabel}>{item.name}</label>
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    className={styles.commentImage} // Adicione estilos para a imagem
+                                />
+
+                                <label className={styles.commentsLabel}>{item.name}</label>
+                            </div>
+
                             {item.user === session?.user?.email && (
                                 <button className={styles.buttonTrash} onClick={() => handleDeleteComment(item.id)}>
-                                    <FaTrash size={18} color="#ea3140" />
+                                    <FaTrash size={24} color="#ea3140" />
                                 </button>
                             )}
                         </div>
@@ -143,7 +155,8 @@ export const getServerSideProps = async ({ params }: TaskProps) => {
             comment: doc.data().comment,
             taskId: doc.data().taskId,
             user: doc.data().user,
-            name: doc.data().name
+            name: doc.data().name,
+            image: doc.data().image // Inclua a imagem na consulta
         })
     })
 

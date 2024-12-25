@@ -64,6 +64,14 @@
     padding: 4px 14px;
     border-radius: 4px;
     margin: 0 14px;
+    border: 1.5px solid #f1f1f1;
+    transition: all 0.3s;
+
+    &:hover{
+        background-color: #0f0f0f;
+        color: #f1f1f1;
+        border: 1.5px solid #f1f1f1;
+    }
 }
 
 @media (max-width: 768px){
