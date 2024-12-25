@@ -12,11 +12,7 @@ export function Header() {
 
     const router = useRouter();
     const { pathname } = router; // obtém a rota
-    const textButton = "Meu painel" 
-    if (pathname === "/dashboard") {
-       console.log("Você está na página dashboard!");
-       textButton = "Home"
-    }
+    const textButton = pathname === "/dashboard" ? "Home" : "Meu painel";
 
     return (
         <header className={styles.header}>
