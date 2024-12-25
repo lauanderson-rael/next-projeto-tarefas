@@ -72,6 +72,10 @@
         color: #f1f1f1;
         border: 1.5px solid #f1f1f1;
     }
+    &::selection{
+        background-color: #eaeaea:
+        
+    }
 }
 
 @media (max-width: 768px){
