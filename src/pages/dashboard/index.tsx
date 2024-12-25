@@ -154,7 +154,7 @@ export default function Dashboard({ user }: HomeProps) {
                 </section>
 
                 <section className={styles.taskContainer}>
-                    <h1>Minhas terefas</h1>
+                    <h1>Minhas tarefas</h1>
 
                     {tasks.map((item) => (
                         <article className={styles.task} key={item.id}>
