@@ -16,8 +16,8 @@ const ConfirmDeleteModal = ({ isOpen, onRequestClose, onConfirm }: any) => {
             <h2>Confirmar Exclusão</h2>
             <p>Você tem certeza que deseja excluir esta tarefa?</p>
             <div className={styles.Containerbuttons}>
-                <button className={styles.button} onClick={onConfirm}>Sim</button>
-                <button className={styles.button} onClick={onRequestClose}>Não</button>
+                <button className={styles.button} style={{ backgroundColor: 'red' }} onClick={onConfirm}>Sim</button>
+                <button className={styles.button} style={{ backgroundColor: 'green' }} onClick={onRequestClose}>Não</button>
             </div>
         </Modal>
     );
