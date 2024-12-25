@@ -13,6 +13,7 @@ import { IoMdOpen } from "react-icons/io";
 
 import { db } from '@/services/firebaseConnection'
 import { addDoc, collection, query, orderBy, where, onSnapshot, doc, deleteDoc } from 'firebase/firestore'
+import ConfirmDeleteModal from '@/components/modalDelete'
 
 interface HomeProps {
     user: {
@@ -32,6 +33,21 @@ export default function Dashboard({ user }: HomeProps) {
     const [input, setInput] = useState("")
     const [publicTask, setPublicTask] = useState(false)
     const [tasks, setTasks] = useState<TaskProps[]>([])
+    // modal
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
+
+    const openModal = (taskId: any) => {
+        setTaskToDelete(taskId);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setTaskToDelete(null);
+        setIsModalOpen(false);
+    };
+
+    // end modal
 
     useEffect(() => {
         async function loadTarefas() {
@@ -86,12 +102,6 @@ export default function Dashboard({ user }: HomeProps) {
     }
 
     async function handleShare(id: string) {
-        // await navigator.clipboard.writeText(
-        //     `${process.env.URL}/task/${id}`
-        // );
-
-        // alert("URL copiada com sucesso! ")
-
         const siteURL = process.env.NODE_ENV === "development"
             ? "http://localhost:3000"  // URL de desenvolvimento
             : window.location.origin; // URL em produção (Vercel)
@@ -100,9 +110,13 @@ export default function Dashboard({ user }: HomeProps) {
         alert("URL copiada com sucesso!\nAgora voce pode compartilhar essa terefa com quem voce quiser.");
     }
 
-    async function handleDeleteTask(id: string) {
-        const docRef = doc(db, "tarefas", id)
-        await deleteDoc(docRef)
+    async function handleDeleteTask() {
+        if (taskToDelete) {
+            const id = taskToDelete
+            const docRef = doc(db, "tarefas", id)
+            await deleteDoc(docRef)
+            closeModal();
+        }
     }
 
 
@@ -167,9 +181,14 @@ export default function Dashboard({ user }: HomeProps) {
                                 ) : (
                                     <p>{item.tarefa}</p>
                                 )}
-                                <button className={styles.trashButton} onClick={() => handleDeleteTask(item.id)} >
+                                <button className={styles.trashButton} onClick={() => openModal(item.id)} >
                                     <FaTrash size={24} color='#ea3140' />
                                 </button>
+                                <ConfirmDeleteModal
+                                    isOpen={isModalOpen}
+                                    onRequestClose={closeModal}
+                                    onConfirm={handleDeleteTask}
+                                />
                             </div>
                         </article>
                     ))}
