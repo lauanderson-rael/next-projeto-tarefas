@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/home.module.css"
-import heroImg from "../assets/hero.png"
+import heroImg from "../assets/file.svg"
 import { GetStaticProps } from "next";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/services/firebaseConnection";
