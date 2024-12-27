@@ -4,6 +4,7 @@
 
 .content{
     background-color: #0f0f0f;
+    background-color:  var(--secondary);
     width: 100%;
     display: flex;
     justify-content: center;
@@ -84,11 +85,24 @@
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 
+.date{
+   align-self: flex-end;
+   color: #909090;
+   font-size: small;
+   margin: 0;
+   padding: 0;
+}
+
 .tagContainer{
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    width: 100%;
     margin-bottom: 8px;
+}
+.tagContainer div{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 .tag{

@@ -29,11 +29,11 @@
   &:hover{
     opacity: 0.7;
   }
-  
+
 }
 
 .overlay {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.3);
   position: fixed;
   top: 0;
   left: 0;

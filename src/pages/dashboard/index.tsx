@@ -5,7 +5,6 @@ import styles from './styles.module.css'
 import Head from 'next/head'
 import Link from 'next/link'
 
-
 import Textarea from '@/components/textarea'
 import { FiShare2 } from 'react-icons/fi'
 import { FaTrash } from 'react-icons/fa'
@@ -14,6 +13,9 @@ import { IoMdOpen } from "react-icons/io";
 import { db } from '@/services/firebaseConnection'
 import { addDoc, collection, query, orderBy, where, onSnapshot, doc, deleteDoc } from 'firebase/firestore'
 import ConfirmDeleteModal from '@/components/modalDelete'
+
+import { useRouter } from 'next/router'
+import Loading from '@/components/Loading'
 
 interface HomeProps {
     user: {
@@ -33,6 +35,7 @@ export default function Dashboard({ user }: HomeProps) {
     const [input, setInput] = useState("")
     const [publicTask, setPublicTask] = useState(false)
     const [tasks, setTasks] = useState<TaskProps[]>([])
+
     // modal
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
@@ -119,9 +122,26 @@ export default function Dashboard({ user }: HomeProps) {
         }
     }
 
+    const formatDate = (timestamp: any) => {
+        const date = timestamp.toDate(); // Converte o timestamp para um objeto Date
+        return date.toLocaleString(); // Retorna a data e hora formatada
+    };
+
+    // Loading e navegacao para a terafa
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+
+    const handleClick = async (item: any) => {
+        setLoading(true); // Ativa o loading
+        await router.push(`/task/${item.id}`);
+        setLoading(false); // Desativa o loading após a navegação
+    };
+
+    // fim Loading e navegacao para a terafa
 
     return (
         <div className={styles.container}>
+            {loading && <Loading />} {/*  carregando... */}
             <Head>
                 <title>Meu Painel de tarefas</title>
             </Head>
@@ -158,19 +178,37 @@ export default function Dashboard({ user }: HomeProps) {
 
                     {tasks.map((item) => (
                         <article className={styles.task} key={item.id}>
-                            {item.public && (
-                                // Publico e botao compartilhar e link
+
+                            {item.public ? (
+                                // tarefa Publica
                                 <div className={styles.tagContainer}>
-                                    <label className={styles.tag}>PUBLICO</label>
-                                    <button className={styles.shareButton} onClick={() => handleShare(item.id)}>
-                                        <FiShare2 size={22} color='#3183ff' />
-                                    </button>
-                                    <button className={styles.shareButton}>
-                                        <Link href={`task/${item.id}`}>
+                                    <div>
+                                        <label className={styles.tag}>PUBLICA</label>
+                                        <button className={styles.shareButton} onClick={() => handleShare(item.id)}>
+                                            <FiShare2 size={22} color='#3183ff' />
+                                        </button>
+                                        <button className={styles.shareButton} onClick={() => handleClick(item)}>
+
                                             <IoMdOpen size={22} color='#3183ff' />
-                                        </Link>
+
+                                        </button>
+
+                                    </div>
+
+                                    <button className={styles.trashButton} onClick={() => openModal(item.id)} >
+                                        <FaTrash size={22} color='#ea3140' />
                                     </button>
                                 </div>
+                                //fim terefa publica
+                            ) : (
+                                // tarefa privada
+                                <div className={styles.tagContainer}>
+                                    <label className={styles.tag} style={{ backgroundColor: '#1c1c1d' }}>PRIVADA</label>
+                                    <button className={styles.trashButton} onClick={() => openModal(item.id)} >
+                                        <FaTrash size={22} color='#ea3140' />
+                                    </button>
+                                </div>
+                                //fim terefa privada
                             )}
 
                             <div className={styles.taskContent}>
@@ -181,15 +219,16 @@ export default function Dashboard({ user }: HomeProps) {
                                 ) : (
                                     <p>{item.tarefa}</p>
                                 )}
-                                <button className={styles.trashButton} onClick={() => openModal(item.id)} >
-                                    <FaTrash size={24} color='#ea3140' />
-                                </button>
+
                                 <ConfirmDeleteModal
                                     isOpen={isModalOpen}
                                     onRequestClose={closeModal}
                                     onConfirm={handleDeleteTask}
                                 />
+
                             </div>
+
+                            <div className={styles.date}> {formatDate(item.created)}</div>
                         </article>
                     ))}
                 </section>

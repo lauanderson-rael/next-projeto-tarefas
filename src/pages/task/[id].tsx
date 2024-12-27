@@ -7,11 +7,13 @@ import { db } from "@/services/firebaseConnection";
 import { collection, doc, query, where, getDoc, getDocs, addDoc, deleteDoc } from "firebase/firestore";
 import Textarea from "@/components/textarea";
 import { FaTrash } from "react-icons/fa";
+import ConfirmDeleteModal from "@/components/modalDelete";
+import { create } from "domain";
 
 interface TaskProps {
     item: {
         tarefa: string;
-        created: Date;
+        created: Date | string;
         public: boolean
         user: string;
         taskId: string;
@@ -27,13 +29,29 @@ interface CommentProps {
     taskId: string;
     user: string;
     image: string;
-    name: string
+    name: string;
+    created: string | Date;
 }
 
 export default function Task({ item, allComments }: TaskProps) {
     const { data: session } = useSession()
     const [input, setInput] = useState("")
     const [comments, setComments] = useState<CommentProps[]>(allComments || [])
+    // modal delete //
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
+
+    const openModal = (taskId: any) => {
+        setTaskToDelete(taskId);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setTaskToDelete(null);
+        setIsModalOpen(false);
+    };
+
+    // end modal //
 
     async function handleCommnet(event: FormEvent) {
         event.preventDefault()
@@ -57,7 +75,8 @@ export default function Task({ item, allComments }: TaskProps) {
                 user: session?.user?.email,
                 name: session?.user?.name,
                 image: session?.user?.image!, // Adicionando a imagem ao estado
-                taskId: item?.taskId
+                taskId: item?.taskId,
+                created: item?.created
             }
             setComments([...comments, data])
             setInput("")
@@ -68,18 +87,34 @@ export default function Task({ item, allComments }: TaskProps) {
 
     }
 
-    async function handleDeleteComment(id: string) {
+    async function handleDeleteComment() {
         try {
-            const docRef = doc(db, "comments", id)
-            await deleteDoc(docRef)
+            if (taskToDelete) {
+                const id = taskToDelete
+                const docRef = doc(db, "comments", id)
+                await deleteDoc(docRef)
 
-            const deleteComment = comments.filter(comment => comment.id !== id)
-            setComments(deleteComment)
+                const deleteComment = comments.filter(comment => comment.id !== id)
+                setComments(deleteComment)
+                closeModal();
+            }
 
         } catch (error) {
             console.log(error)
         }
     }
+
+    const formatDate = (dateString: string): string => {
+        const date = new Date(dateString); // Converte a string para um objeto Date
+
+        const day = String(date.getDate()).padStart(2, '0'); // Dia com 2 dígitos
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês com 2 dígitos
+        const year = date.getFullYear(); // Ano com 4 dígitos
+        const hours = String(date.getHours()).padStart(2, '0'); // Horas com 2 dígitos
+        const minutes = String(date.getMinutes()).padStart(2, '0'); // Minutos com 2 dígitos
+        const seconds = String(date.getSeconds()).padStart(2, '0'); // Segundos com 2 dígitos
+        return `${day}/${month}/${year}, ${hours}:${minutes}:${seconds}`;
+    };
 
     return (
         <div className={styles.container}>
@@ -112,7 +147,6 @@ export default function Task({ item, allComments }: TaskProps) {
             <section className={styles.commentsContainer}>
                 <h2>Todos os comentários</h2>
 
-
                 {comments.length === 0 && <span>Nenhum comentário ainda...</span>}
                 {comments.map((item) => (
                     <article key={item.id} className={styles.comment}>
@@ -128,12 +162,22 @@ export default function Task({ item, allComments }: TaskProps) {
                             </div>
 
                             {item.user === session?.user?.email && (
-                                <button className={styles.buttonTrash} onClick={() => handleDeleteComment(item.id)}>
+                                <button className={styles.buttonTrash} onClick={() => openModal(item.id)}>
                                     <FaTrash size={24} color="#ea3140" />
                                 </button>
                             )}
+
+                            <ConfirmDeleteModal
+                                isOpen={isModalOpen}
+                                onRequestClose={closeModal}
+                                onConfirm={handleDeleteComment}
+                            />
                         </div>
                         <p>{item.comment}</p>
+                        <div className={styles.date}>
+                            <div></div>
+                            <div>{formatDate(item.created.toLocaleString())}</div>
+                        </div>
                     </article>
                 ))}
             </section>
@@ -149,6 +193,7 @@ export const getServerSideProps = async ({ params }: TaskProps) => {
     const snapshotComments = await getDocs(q)
 
     let allComments: CommentProps[] = []
+
     snapshotComments.forEach((doc) => {
         allComments.push({
             id: doc.id,
@@ -156,7 +201,8 @@ export const getServerSideProps = async ({ params }: TaskProps) => {
             taskId: doc.data().taskId,
             user: doc.data().user,
             name: doc.data().name,
-            image: doc.data().image // Inclua a imagem na consulta
+            image: doc.data().image, // Inclua a imagem na consulta
+            created: new Date(doc.data().created.seconds * 1000).toISOString(), // Converte
         })
     })
 

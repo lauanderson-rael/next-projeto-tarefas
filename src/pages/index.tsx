@@ -52,7 +52,7 @@ export default function Home({ posts, comments }: HomeProps) {
 
 // lado do servidor - gerando pagina estatica a cada 60 segundos
 export const getStaticProps: GetStaticProps = async () => {
-  // buscar o banco os numeros e mandar pro componente
+  // buscar no banco os numeros e mandar pro componente
   const commentRef = collection(db, "comments")
   const postRef = collection(db, "tarefas")
   console.log("buscando pelo server side --------------")

@@ -1,0 +1,46 @@
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 999;
+
+  }
+
+  .loading p {
+    font-size: 20px;
+    color: #ffffff;
+    font-weight: bold;
+    animation: pulse 1s infinite ease-in-out; /* Animação de pulsar no texto */
+  }
+
+  /* Animação de entrada do fundo */
+  @keyframes fadeInBackground {
+    from {
+      background-color: rgba(0, 0, 0, 0);
+    }
+    to {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  /* Animação de pulsar no texto */
+  @keyframes pulse {
+    0% {
+      transform: scale(1); /* Tamanho original */
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.1); /* Leve aumento no tamanho */
+      opacity: 0.8; /* Reduz a opacidade */
+    }
+    100% {
+      transform: scale(1); /* Volta ao tamanho original */
+      opacity: 1;
+    }
+  }
