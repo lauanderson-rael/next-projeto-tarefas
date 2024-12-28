@@ -3,6 +3,8 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import styles from './styles.module.css';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Loading from "../Loading";
+import { useState } from "react";
 
 export function Header() {
     const { data: session, status } = useSession();
@@ -18,8 +20,16 @@ export function Header() {
     const isTaskPage = pathname.startsWith("/task/");
     const textButton = isTaskPage ? "Voltar ao Painel" : "Painel de tarefas";
 
+    const [loading, setLoading] = useState(false);
+    const handleClick = async () => {
+        setLoading(true); // Ativa o loading
+        await router.push(`/dashboard`);
+        setLoading(false); // Desativa o loading após a navegação
+    };
+
     return (
         <header className={styles.header}>
+            {loading && <Loading />} {/*  carregando... */}
             <section className={styles.content}>
                 <nav className={styles.nav}>
                     <Link href={'/'}>
@@ -27,9 +37,9 @@ export function Header() {
                     </Link>
 
                     {session?.user && (
-                        <Link href={'/dashboard'} className={styles.link}>
+                        <a className={styles.link} onClick={() => handleClick()}>
                             {textButton}
-                        </Link>
+                        </a>
                     )}
                 </nav>
 
