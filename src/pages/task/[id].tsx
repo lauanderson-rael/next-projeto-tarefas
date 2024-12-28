@@ -14,7 +14,7 @@ import { create } from "domain";
 interface TaskProps {
     item: {
         tarefa: string;
-        created: Date | string;
+        created: string;
         public: boolean
         user: string;
         taskId: string;
@@ -31,7 +31,7 @@ interface CommentProps {
     user: string;
     image: string;
     name: string;
-    created: string | Date;
+    created: string;
 }
 
 export default function Task({ item, allComments }: TaskProps) {
@@ -73,9 +73,10 @@ export default function Task({ item, allComments }: TaskProps) {
         if (!session?.user?.email || !session?.user?.name) return;
 
         try {
+            const createdAt = new Date(); // Salve a data correta
             const docRef = await addDoc(collection(db, "comments"), {
                 comment: input,
-                created: new Date(),
+                created: createdAt, // Passa a data corretamente
                 user: session?.user?.email,
                 name: session?.user?.name,
                 image: session?.user?.image,
@@ -87,9 +88,9 @@ export default function Task({ item, allComments }: TaskProps) {
                 comment: input,
                 user: session?.user?.email,
                 name: session?.user?.name,
-                image: session?.user?.image!, // Adicionando a imagem ao estado
+                image: session?.user?.image!,
                 taskId: item?.taskId,
-                created: item?.created
+                created: createdAt.toISOString()
             }
             setComments([...comments, data])
             setInput("")
@@ -97,8 +98,8 @@ export default function Task({ item, allComments }: TaskProps) {
         } catch (error) {
             console.log(error)
         }
-
     }
+
 
     async function handleDeleteComment() {
         try {
