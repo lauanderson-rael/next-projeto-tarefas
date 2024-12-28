@@ -4,7 +4,7 @@ import styles from './styles.module.css';
 
 Modal.setAppElement('#__next'); // Necessário para acessibilidade
 
-const ModalUser = ({ isOpen, onRequestClose, name, url, email, fun }: any) => {
+const ModalUser = ({ isOpen, onRequestClose, name, url, email }: any) => {
     return (
         <Modal
             isOpen={isOpen}

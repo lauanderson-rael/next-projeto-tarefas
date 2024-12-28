@@ -8,8 +8,6 @@ import { collection, doc, query, where, getDoc, getDocs, addDoc, deleteDoc } fro
 import Textarea from "@/components/textarea";
 import { FaTrash } from "react-icons/fa";
 import ConfirmDeleteModal from "@/components/modalDelete";
-import ModalUser from "@/components/modalUser";
-import { create } from "domain";
 
 interface TaskProps {
     item: {
@@ -54,17 +52,6 @@ export default function Task({ item, allComments }: TaskProps) {
     };
     // end modal //
 
-
-    ///////////////
-    const [isModalUserOpen, setIsModalUserOpen] = useState(false);
-    const openUserModal = () => {
-        setIsModalUserOpen(true);
-    };
-
-    const closeUserModal = () => {
-        setIsModalUserOpen(false);
-    };
-    /////////////////////////
 
     async function handleCommnet(event: FormEvent) {
         event.preventDefault()
@@ -142,6 +129,9 @@ export default function Task({ item, allComments }: TaskProps) {
                     <p>
                         {item.tarefa}
                     </p>
+                    <p className={styles.date} style={{ width: "100px" }}>
+                        {item.created.toString()}
+                    </p>
                 </article>
             </main>
 
@@ -159,7 +149,7 @@ export default function Task({ item, allComments }: TaskProps) {
             </section>
 
             <section className={styles.commentsContainer}>
-                <h2>Todos os comentários</h2>
+                <h2>Todos os comentários ({comments.length})</h2>
 
                 {comments.length === 0 && <span>Nenhum comentário ainda...</span>}
                 {comments.map((item) => (
@@ -168,17 +158,9 @@ export default function Task({ item, allComments }: TaskProps) {
                             <div style={{ display: "flex", alignItems: "center" }}>
 
                                 <img
-                                    onClick={() => openUserModal()}
                                     src={item.image}
                                     alt={item.name}
                                     className={styles.commentImage} // Adicione estilos para a imagem
-                                />
-                                <ModalUser
-                                    isOpen={isModalUserOpen}
-                                    onRequestClose={closeUserModal}
-                                    name={item.name}
-                                    url={item.image}
-                                    email={item.user}
                                 />
 
                                 <label className={styles.commentsLabel}>{item.name}</label>
