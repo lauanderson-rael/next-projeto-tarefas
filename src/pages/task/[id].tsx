@@ -169,6 +169,7 @@ export default function Task({ item, allComments }: TaskProps) {
 
                             <ConfirmDeleteModal
                                 isOpen={isModalOpen}
+                                message="Tem certeza que deseja excluir esse comentário?"
                                 onRequestClose={closeModal}
                                 onConfirm={handleDeleteComment}
                             />

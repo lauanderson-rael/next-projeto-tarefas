@@ -1,5 +1,6 @@
 .container{
   background-color: #0f0f0f;
+  background-color: var(--secondary);
 
   width: 100%;
   height: calc(100vh - 76px); /*altura da tela - altura do header*/

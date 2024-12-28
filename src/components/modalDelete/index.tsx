@@ -4,7 +4,7 @@ import styles from './styles.module.css'
 
 Modal.setAppElement('#__next'); // Necessário para acessibilidade
 
-const ConfirmDeleteModal = ({ isOpen, onRequestClose, onConfirm }: any) => {
+const ConfirmDeleteModal = ({ isOpen, onRequestClose, onConfirm, message }: any) => {
     return (
         <Modal
             isOpen={isOpen}
@@ -14,7 +14,7 @@ const ConfirmDeleteModal = ({ isOpen, onRequestClose, onConfirm }: any) => {
             overlayClassName={styles.overlay}
         >
             <h2>Confirmar Exclusão</h2>
-            <p>Você tem certeza que deseja excluir esta tarefa?</p>
+            <p>{message}</p>
             <div className={styles.Containerbuttons}>
                 <button className={styles.button} style={{ backgroundColor: 'red' }} onClick={onConfirm}>Sim</button>
                 <button className={styles.button} style={{ backgroundColor: 'green' }} onClick={onRequestClose}>Não</button>

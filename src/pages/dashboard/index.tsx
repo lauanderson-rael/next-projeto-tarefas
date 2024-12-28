@@ -222,6 +222,7 @@ export default function Dashboard({ user }: HomeProps) {
 
                                 <ConfirmDeleteModal
                                     isOpen={isModalOpen}
+                                    message="Tem certeza que deseja excluir esta tarefa?"
                                     onRequestClose={closeModal}
                                     onConfirm={handleDeleteTask}
                                 />
